@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: local-models-rules
+  namespace: model-monitoring
+spec:
+  groups:
+    - name: local-models.health
+      rules:
+        - alert: LocalModelTargetsDown
+          expr: sum(up{namespace="vllm"}) == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Local model scrape targets are down"
+            description: "Prometheus is not scraping any targets in namespace vllm for 5 minutes (predictor monitoring likely broken)."

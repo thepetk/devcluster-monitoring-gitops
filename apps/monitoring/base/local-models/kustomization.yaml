@@ -4,3 +4,4 @@ namespace: model-monitoring
 resources:
   - podmonitor-kserve-vllm-predictors.yaml
   - servicemonitor-dcgm-exporter.yaml
+  - prometheus-rules.yaml
