@@ -7,9 +7,21 @@
     "timezone": "browser",
     "panels": [
       {
+        "type": "stat",
+        "title": "RobotHeus target up",
+        "gridPos": { "x": 0, "y": 0, "w": 6, "h": 6 },
+        "targets": [
+          {
+            "refId": "A",
+            "expr": "max(up{job=~\".*robotheus.*\"})",
+            "instant": true
+          }
+        ]
+      },
+      {
         "type": "timeseries",
         "title": "OpenAI tokens/sec (input+output)",
-        "gridPos": { "x": 0, "y": 0, "w": 12, "h": 9 },
+        "gridPos": { "x": 6, "y": 0, "w": 18, "h": 9 },
         "targets": [
           {
             "refId": "A",
@@ -20,7 +32,7 @@
       {
         "type": "timeseries",
         "title": "OpenAI cost/day (USD)",
-        "gridPos": { "x": 12, "y": 0, "w": 12, "h": 9 },
+        "gridPos": { "x": 0, "y": 9, "w": 12, "h": 9 },
         "targets": [
           {
             "refId": "A",
@@ -31,7 +43,7 @@
       {
         "type": "timeseries",
         "title": "Gemini tokens/sec (input+output)",
-        "gridPos": { "x": 0, "y": 9, "w": 12, "h": 9 },
+        "gridPos": { "x": 12, "y": 9, "w": 12, "h": 9 },
         "targets": [
           {
             "refId": "A",
@@ -42,7 +54,7 @@
       {
         "type": "timeseries",
         "title": "Gemini cost/day (USD)",
-        "gridPos": { "x": 12, "y": 9, "w": 12, "h": 9 },
+        "gridPos": { "x": 0, "y": 18, "w": 12, "h": 9 },
         "targets": [
           {
             "refId": "A",
