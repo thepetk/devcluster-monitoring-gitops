@@ -50,6 +50,28 @@
             "expr": "avg by (instance, gpu) (DCGM_FI_DEV_FB_USED)"
           }
         ]
+      },
+      {
+        "type": "timeseries",
+        "title": "GPU Utilization by node (%)",
+        "gridPos": { "x": 0, "y": 24, "w": 12, "h": 9 },
+        "targets": [
+          {
+            "refId": "A",
+            "expr": "avg by (node) (DCGM_FI_DEV_GPU_UTIL)"
+          }
+        ]
+      },
+      {
+        "type": "timeseries",
+        "title": "Predictor pods by node",
+        "gridPos": { "x": 12, "y": 24, "w": 12, "h": 9 },
+        "targets": [
+          {
+            "refId": "A",
+            "expr": "count by (node) (kube_pod_info{namespace=\"vllm\", pod=~\".*predictor.*\"})"
+          }
+        ]
       }
     ]
   }
