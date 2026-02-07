@@ -17,7 +17,7 @@ Everything is deployed declaratively using **Argo CD and Kustomize**.
 - Managed by the [Grafana Operator](https://github.com/grafana/grafana-operator) (`grafana.integreatly.org/v1beta1`)
 - Runs in `model-monitoring` namespace
 - Dashboards are declared as `GrafanaDashboard` CRDs (see [grafana dir](./apps/monitoring/base/grafana/))
-- Prometheus datasource is configured via `GrafanaDatasource` CRD (`http://prometheus-k8s.openshift-monitoring.svc:9091`)
+- Prometheus datasource is configured via `GrafanaDatasource` CRD (`https://prometheus-k8s.openshift-monitoring.svc:9091`)
 - All resources connect to the Grafana instance via `instanceSelector: { dashboards: "grafana" }`
 
 #### Dashboards

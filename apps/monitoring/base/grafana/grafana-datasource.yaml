@@ -13,3 +13,5 @@ spec:
     url: https://prometheus-k8s.openshift-monitoring.svc:9091
     isDefault: true
     editable: false
+    jsonData:
+      tlsSkipVerify: true
