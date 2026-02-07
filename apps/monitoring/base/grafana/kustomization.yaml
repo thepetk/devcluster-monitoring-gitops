@@ -12,10 +12,15 @@ configMapGenerator:
   - name: grafana-datasources
     files:
       - prometheus-datasource.yaml=datasource-prometheus.yaml
-  - name: grafana-dashboards
+
+  - name: grafana-provisioning
+    files:
+      - dashboards.yaml=dashboards-provisioning.yaml
+
+  - name: grafana-dashboards-json
     files:
       - local-models-dashboard.json=dashboards/local-models-dashboard.json
-      - external-usage-dashboard.json=dashboards/ai-providers-dashboard.json
+      - external-usage-dashboard.json=dashboards/external-usage-dashboard.json
 
 generatorOptions:
   disableNameSuffixHash: true
