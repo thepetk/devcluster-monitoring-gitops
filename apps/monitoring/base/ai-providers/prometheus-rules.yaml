@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: robotheus-rules
+  namespace: model-monitoring
+spec:
+  groups:
+    - name: robotheus.health
+      rules:
+        - alert: RobotheusTargetDown
+          expr: up{job=~".*robotheus.*"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "RobotHeus exporter target is down"
+            description: "Prometheus has not been able to scrape RobotHeus for 5 minutes."

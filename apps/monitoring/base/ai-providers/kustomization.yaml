@@ -5,3 +5,4 @@ resources:
   - ai-providers-deployment.yaml
   - ai-providers-service.yaml
   - ai-providers-servicemonitor.yaml
+  - prometheus-rules.yaml
