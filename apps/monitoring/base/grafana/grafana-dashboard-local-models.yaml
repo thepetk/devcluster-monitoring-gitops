@@ -17,18 +17,6 @@ spec:
       "timezone": "browser",
       "panels": [
         {
-          "type": "stat",
-          "title": "Targets Up (vLLM predictors)",
-          "gridPos": { "x": 0, "y": 0, "w": 12, "h": 6 },
-          "targets": [
-            {
-              "refId": "A",
-              "expr": "sum(up{namespace=\"vllm\"})",
-              "instant": true
-            }
-          ]
-        },
-        {
           "type": "timeseries",
           "title": "CPU Usage (predictor pods)",
           "gridPos": { "x": 0, "y": 6, "w": 24, "h": 9 },
@@ -91,17 +79,6 @@ spec:
             {
               "refId": "A",
               "expr": "sum by (pod) (rate(http_requests_total{namespace=\"vllm\", pod=~\".*predictor.*\"}[5m]))"
-            }
-          ]
-        },
-        {
-          "type": "timeseries",
-          "title": "p95 latency (s) (predictor pods)",
-          "gridPos": { "x": 12, "y": 33, "w": 12, "h": 9 },
-          "targets": [
-            {
-              "refId": "A",
-              "expr": "histogram_quantile(0.95, sum by (le, pod) (rate(http_request_duration_seconds_bucket{namespace=\"vllm\", pod=~\".*predictor.*\"}[5m])))"
             }
           ]
         }
