@@ -5,5 +5,5 @@ namespace: model-monitoring
 resources:
   - namespace.yaml
   - grafana
-  - local-models
-  # - ai-providers
+  # - local-models
+  - ai-providers
