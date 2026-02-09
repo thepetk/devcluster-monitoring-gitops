@@ -10,7 +10,7 @@ spec:
   json: >
     {
       "uid": "ai-providers",
-      "title": "AI Providers Usage (via robotheus)",
+      "title": "OpenAI Usage",
       "schemaVersion": 39,
       "version": 1,
       "refresh": "1m",
@@ -18,8 +18,17 @@ spec:
       "panels": [
         {
           "type": "stat",
-          "title": "RobotHeus target up",
+          "title": "Exporter Health",
+          "description": "Whether the robotheus exporter is running and being scraped by Prometheus. 1 = healthy, 0 = down.",
           "gridPos": { "x": 0, "y": 0, "w": 6, "h": 6 },
+          "fieldConfig": {
+            "defaults": {
+              "mappings": [
+                { "type": "value", "options": { "1": { "text": "UP", "color": "green" }, "0": { "text": "DOWN", "color": "red" } } }
+              ],
+              "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] }
+            }
+          },
           "targets": [
             {
               "refId": "A",
@@ -30,45 +39,52 @@ spec:
         },
         {
           "type": "timeseries",
-          "title": "OpenAI tokens/sec (input+output)",
+          "title": "OpenAI Token Throughput",
+          "description": "Rate of tokens (input + output combined) consumed across all OpenAI API calls, measured over a 5-minute rolling window.",
           "gridPos": { "x": 6, "y": 0, "w": 18, "h": 9 },
+          "fieldConfig": {
+            "defaults": { "unit": "tokens/s", "custom": { "fillOpacity": 15 } }
+          },
           "targets": [
             {
               "refId": "A",
-              "expr": "sum(rate(robotheus_openai_tokens_total[5m]))"
+              "expr": "sum(rate(robotheus_openai_tokens_total[5m]))",
+              "legendFormat": "tokens/s"
+            }
+          ]
+        },
+        {
+          "type": "stat",
+          "title": "Cost Today",
+          "description": "Total OpenAI spend (USD) accumulated since midnight UTC, summed across all projects.",
+          "gridPos": { "x": 0, "y": 9, "w": 6, "h": 9 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "currencyUSD",
+              "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 10 }, { "color": "red", "value": 50 }] }
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(increase(robotheus_openai_cost_usd_total[1d]))",
+              "instant": true
             }
           ]
         },
         {
           "type": "timeseries",
-          "title": "OpenAI cost/day (USD)",
-          "gridPos": { "x": 0, "y": 9, "w": 12, "h": 9 },
+          "title": "OpenAI Tokens by Project",
+          "description": "Token consumption rate broken down by OpenAI project, showing which project is driving the most API usage.",
+          "gridPos": { "x": 6, "y": 9, "w": 18, "h": 9 },
+          "fieldConfig": {
+            "defaults": { "unit": "tokens/s", "custom": { "fillOpacity": 15 } }
+          },
           "targets": [
             {
               "refId": "A",
-              "expr": "sum(increase(robotheus_openai_cost_usd_total[1d]))"
-            }
-          ]
-        },
-        {
-          "type": "timeseries",
-          "title": "Gemini tokens/sec (input+output)",
-          "gridPos": { "x": 12, "y": 9, "w": 12, "h": 9 },
-          "targets": [
-            {
-              "refId": "A",
-              "expr": "sum(rate(robotheus_gemini_tokens_total[5m]))"
-            }
-          ]
-        },
-        {
-          "type": "timeseries",
-          "title": "Gemini cost/day (USD)",
-          "gridPos": { "x": 0, "y": 18, "w": 12, "h": 9 },
-          "targets": [
-            {
-              "refId": "A",
-              "expr": "sum(increase(robotheus_gemini_cost_usd_total[1d]))"
+              "expr": "sum by (project_id) (rate(robotheus_openai_tokens_total[5m]))",
+              "legendFormat": "{{ project_id }}"
             }
           ]
         }
