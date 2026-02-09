@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: external-usage-exporter
+  name: robotheus-exporter
   namespace: model-monitoring
   labels:
-    app: external-usage-exporter
+    app: robotheus-exporter
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: external-usage-exporter
+      app: robotheus-exporter
   template:
     metadata:
       labels:
-        app: external-usage-exporter
+        app: robotheus-exporter
     spec:
       containers:
         - name: exporter
@@ -27,6 +27,11 @@ spec:
                 secretKeyRef:
                   name: robotheus-secrets
                   key: OPENAI_API_KEY
+            - name: OPENAI_ORG_ID
+              valueFrom:
+                secretKeyRef:
+                  name: robotheus-secrets
+                  key: OPENAI_ORG_ID
           resources:
             requests:
               cpu: 50m
