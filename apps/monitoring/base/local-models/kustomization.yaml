@@ -5,3 +5,4 @@ resources:
   - podmonitor-kserve-predictors.yaml
   - servicemonitor-dcgm-exporter.yaml
   - prometheus-rules.yaml
+  - alertmanager-config.yaml

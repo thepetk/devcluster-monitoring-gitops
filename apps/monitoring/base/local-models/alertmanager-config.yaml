@@ -1,0 +1,31 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: slack-alert-config
+  namespace: model-monitoring
+spec:
+  route:
+    groupBy:
+      - pod
+    matchers:
+      - name: alert_route
+        matchType: "="
+        value: slack
+    receiver: slack-receiver
+    repeatInterval: 4h
+  receivers:
+    - name: slack-receiver
+      slackConfigs:
+        - apiURL:
+            name: slack-webhook-secret
+            key: webhook-url
+          channel: "#team-rhdh-ai-devcluster-alerts"
+          sendResolved: true
+          title: '{{ if eq .Status "firing" }}[FIRING]{{ else }}[RESOLVED]{{ end }} {{ .CommonLabels.alertname }}'
+          text: >-
+            {{ range .Alerts }}
+            *Alert:* {{ .Labels.alertname }}
+            *Severity:* {{ .Labels.severity }}
+            *Summary:* {{ .Annotations.summary }}
+            *Description:* {{ .Annotations.description }}
+            {{ end }}

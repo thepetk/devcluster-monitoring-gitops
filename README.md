@@ -6,7 +6,7 @@ This repository manages an end-to-end observability stack for:
 - Nvidia GPU utilization (via the Nvidia DCGM exporter)
 - External AI Provider usage and cost monitoring (OpenAI + Gemini) via [thepet/robotheus](https://github.com/thepetk/robotheus.git)
 - Grafana Dashboards for better monitoring
-- Prometheus scraping and basic alerting
+- Prometheus scraping and alerting (including Slack notifications)
 
 Everything is deployed declaratively using **Argo CD and Kustomize**.
 
@@ -22,20 +22,22 @@ Everything is deployed declaratively using **Argo CD and Kustomize**.
 
 #### Dashboards
 
-- **Local Models**:
+- **Local Models (KServe vLLM)**:
 
-  - Predictor pod CPU
-  - GPU utilization + memory
-  - GPU utilization by node
-  - Predictor pods by node
-  - Request rate + p95 latency (generic HTTP metrics)
+  - Predictor pods status table
+  - Predictor pods by GPU node
+  - GPU utilization by node (timeseries + gauge)
+  - GPU memory utilization by node (timeseries + gauge)
+  - CPU utilization by node (timeseries + gauge)
+  - CPU memory utilization by node (timeseries + gauge)
+  - Predictor token throughput by pod (prompt + generation tokens/s)
+  - Failed pods count (vllm namespace)
 
-- **AI Providers usage**: Currently on team scope
-  - OpenAI tokens/sec
-  - OpenAI cost/day
-  - Gemini tokens/sec
-  - Gemini cost/day
-  - Robotheus scrape health
+- **AI Providers (OpenAI)**:
+  - Exporter health (robotheus up/down)
+  - OpenAI token throughput (tokens/s)
+  - OpenAI cost today (USD)
+  - OpenAI tokens by project
 
 ---
 
@@ -49,12 +51,17 @@ Scraped via `PodMonitor`:
 
 GPU metrics are scraped from DCGM exporter using `ServiceMonitor`.
 
-### Alerts:
+### Alerts
 
-Alerts are set via prometheus rules:
+Alerts are set via `PrometheusRule` and routed through `AlertmanagerConfig`:
 
-- Predictor scrape down
-- Robotheus scrape down
+- **LocalModelTargetsDown** (warning) — fires when no predictor scrape targets are up for 5 minutes
+- **RobotheusTargetsDown** (warning) — fires when Robotheus scrape targets are down
+- **VllmPodNotReady** (critical, Slack) — fires when any pod in the `vllm` namespace is stuck in Pending or Failed phase for more than 1 hour
+
+#### Slack Integration
+
+The `VllmPodNotReady` alert is routed to Slack via an `AlertmanagerConfig` CR. Alerts matching `alert_route: slack` are sent to the `#team-rhdh-ai-devcluster-alerts` channel using a webhook URL stored in a Secret (see below). Resolved notifications are also sent, and alerts repeat every 4 hours.
 
 ## Required Pre-existing Secrets
 
@@ -71,6 +78,16 @@ Keys:
 - `username`
 - `password`
 - `token` — Bearer token for Prometheus access (service account token with `cluster-monitoring-view` role)
+
+### Slack Alerting
+
+```
+model-monitoring/slack-webhook-secret
+```
+
+Keys:
+
+- `webhook-url` — Slack incoming webhook URL for the target channel
 
 ### Robotheus
 
@@ -95,7 +112,8 @@ Keys:
 ## Important Notes
 
 - **Grafana Operator** must be installed on the cluster (via OperatorHub or manual install)
-- **Prometheus Operator** must be installed on the cluster (provides `PodMonitor`, `ServiceMonitor`, and `PrometheusRule` CRDs)
+- **Prometheus Operator** must be installed on the cluster (provides `PodMonitor`, `ServiceMonitor`, `PrometheusRule`, and `AlertmanagerConfig` CRDs)
+- **User-workload-monitoring** must be enabled on OpenShift for `AlertmanagerConfig` to work
 - Prometheus must already be present in the cluster
 - NVIDIA GPU Operator + DCGM exporter must already be installed
 
