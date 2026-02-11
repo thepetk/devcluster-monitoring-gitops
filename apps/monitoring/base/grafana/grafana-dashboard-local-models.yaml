@@ -232,36 +232,9 @@ spec:
         },
         {
           "type": "timeseries",
-          "title": "Predictor Traffic (req/s) by pod",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 38, "w": 24, "h": 9 },
-          "targets": [
-            {
-              "refId": "A",
-              "expr": "sum by (pod) (rate(http_requests_total{namespace=\"vllm\", pod=~\".*predictor.*\"}[5m]))",
-              "legendFormat": "{{pod}}"
-            }
-          ],
-          "fieldConfig": {
-            "defaults": {
-              "unit": "reqps"
-            },
-            "overrides": []
-          },
-          "options": {
-            "legend": {
-              "displayMode": "table",
-              "placement": "bottom",
-              "calcs": ["lastNotNull", "max", "mean"]
-            },
-            "tooltip": { "mode": "single" }
-          }
-        },
-        {
-          "type": "timeseries",
           "title": "Predictor Tokens (tokens/s) by pod",
           "datasource": { "type": "prometheus", "uid": "prometheus" },
-          "gridPos": { "x": 0, "y": 47, "w": 24, "h": 9 },
+          "gridPos": { "x": 0, "y": 38, "w": 24, "h": 9 },
           "targets": [
             {
               "refId": "A",
@@ -288,6 +261,32 @@ spec:
             },
             "tooltip": { "mode": "single" }
           }
+        },
+        {
+          "type": "gauge",
+          "title": "Failed Pods (vllm namespace)",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 0, "y": 47, "w": 24, "h": 6 },
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 1 },
+                  { "color": "red", "value": 3 }
+                ]
+              }
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "count(kube_pod_status_phase{namespace=\"vllm\", phase=\"Failed\"} == 1) or vector(0)",
+              "instant": true
+            }
+          ]
         }
       ]
     }
