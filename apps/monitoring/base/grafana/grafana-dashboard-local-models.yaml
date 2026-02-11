@@ -70,13 +70,13 @@ spec:
         },
         {
           "type": "stat",
-          "title": "Predictor pods by node",
+          "title": "Predictor pods by GPU node",
           "datasource": { "type": "prometheus", "uid": "prometheus" },
           "gridPos": { "x": 12, "y": 24, "w": 12, "h": 9 },
           "targets": [
             {
               "refId": "A",
-              "expr": "count by (node) (max by (pod, node) (kube_pod_info{namespace=\"vllm\", pod=~\".*predictor.*\"})) or (0 * count by (node) (kube_node_info))",
+              "expr": "((count by (node) (max by (pod, node) (kube_pod_info{namespace=\"vllm\", pod=~\".*predictor.*\"}))) and on (node) ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"})))) or (0 * ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"}))))",
               "instant": true
             }
           ]
