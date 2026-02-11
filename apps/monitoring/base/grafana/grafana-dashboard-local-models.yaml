@@ -56,14 +56,29 @@ spec:
           ]
         },
         {
-          "type": "stat",
+          "type": "gauge",
           "title": "GPU Utilization by node (%)",
           "datasource": { "type": "prometheus", "uid": "prometheus" },
           "gridPos": { "x": 0, "y": 24, "w": 12, "h": 9 },
+          "fieldConfig": {
+            "defaults": {
+              "min": 0,
+              "max": 100,
+              "unit": "percent",
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "color": "green", "value": null },
+                  { "color": "yellow", "value": 60 },
+                  { "color": "red", "value": 85 }
+                ]
+              }
+            }
+          },
           "targets": [
             {
               "refId": "A",
-              "expr": "avg by (node) (DCGM_FI_DEV_GPU_UTIL)",
+              "expr": "avg by (node) (label_replace(DCGM_FI_DEV_GPU_UTIL, \"node\", \"$1\", \"Hostname\", \"(.*)\")) and on (node) (sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0)",
               "instant": true
             }
           ]
