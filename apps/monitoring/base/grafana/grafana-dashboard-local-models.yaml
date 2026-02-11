@@ -71,7 +71,7 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "count by (node) (max by (pod, node) (kube_pod_info{namespace=\"vllm\", pod=~\".*predictor.*\"}))",
+              "expr": "count by (node) (max by (pod, node) (kube_pod_info{namespace="vllm", pod=~".*predictor.*"}))",
               "instant": true
             }
           ]
