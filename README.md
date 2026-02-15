@@ -77,6 +77,7 @@ Keys:
 
 - `username`
 - `password`
+- `token` — Bearer token for Prometheus access (service account token with `cluster-monitoring-view` role)
 
 ### Slack Alerting
 
@@ -97,7 +98,6 @@ monitoring/robotheus-secrets
 Keys:
 
 - OPENAI_API_KEY
-- OPENAI_ORG_ID
 
 ## Installation
 
