@@ -9,7 +9,8 @@ spec:
       - rolling-demo-ns
   selector:
     matchLabels:
-      app.kubernetes.io/name: rolling-demo-backstage
+      app.kubernetes.io/name: backstage
+      app.kubernetes.io/instance: rolling-demo
   endpoints:
     - port: http-metrics
       path: /metrics
