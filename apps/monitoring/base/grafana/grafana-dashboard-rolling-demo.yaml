@@ -28,7 +28,7 @@ spec:
         {
           "type": "stat",
           "title": "Scrape Target Up",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 0, "y": 1, "w": 6, "h": 6 },
           "targets": [
             {
@@ -41,7 +41,7 @@ spec:
         {
           "type": "timeseries",
           "title": "Inbound HTTP p95",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 6, "y": 1, "w": 18, "h": 6 },
           "fieldConfig": { "defaults": { "unit": "s" } },
           "targets": [
@@ -60,7 +60,7 @@ spec:
         {
           "type": "stat",
           "title": "Catalog Entities",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 0, "y": 8, "w": 6, "h": 6 },
           "targets": [
             { "expr": "max(catalog_entities_count)", "instant": true }
@@ -70,7 +70,7 @@ spec:
         {
           "type": "timeseries",
           "title": "Catalog Processing Rate",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 6, "y": 8, "w": 12, "h": 6 },
           "fieldConfig": { "defaults": { "unit": "ops" } },
           "targets": [
@@ -81,7 +81,7 @@ spec:
         {
           "type": "timeseries",
           "title": "Processing Duration p95",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 18, "y": 8, "w": 6, "h": 6 },
           "fieldConfig": { "defaults": { "unit": "s" } },
           "targets": [
@@ -94,7 +94,7 @@ spec:
         {
           "type": "timeseries",
           "title": "Catalog Queue Length",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 0, "y": 14, "w": 12, "h": 6 },
           "targets": [
             { "expr": "catalog_stitching_queue_length" }
@@ -110,7 +110,7 @@ spec:
         {
           "type": "timeseries",
           "title": "Task Run Rate",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 0, "y": 21, "w": 12, "h": 6 },
           "targets": [
             { "expr": "rate(backend_tasks_task_runs_count_total[5m])" }
@@ -120,7 +120,7 @@ spec:
         {
           "type": "timeseries",
           "title": "Task Duration p95",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 12, "y": 21, "w": 12, "h": 6 },
           "fieldConfig": { "defaults": { "unit": "s" } },
           "targets": [
@@ -139,7 +139,7 @@ spec:
         {
           "type": "timeseries",
           "title": "Event Loop Utilization",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 0, "y": 28, "w": 12, "h": 6 },
           "fieldConfig": { "defaults": { "unit": "percentunit" } },
           "targets": [
@@ -150,7 +150,7 @@ spec:
         {
           "type": "timeseries",
           "title": "Event Loop Delay p99",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 12, "y": 28, "w": 12, "h": 6 },
           "fieldConfig": { "defaults": { "unit": "s" } },
           "targets": [
@@ -161,7 +161,7 @@ spec:
         {
           "type": "timeseries",
           "title": "Heap Used",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 0, "y": 34, "w": 12, "h": 6 },
           "fieldConfig": { "defaults": { "unit": "bytes" } },
           "targets": [
@@ -172,7 +172,7 @@ spec:
         {
           "type": "timeseries",
           "title": "Process CPU Utilization",
-          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 12, "y": 34, "w": 12, "h": 6 },
           "fieldConfig": { "defaults": { "unit": "percentunit" } },
           "targets": [
