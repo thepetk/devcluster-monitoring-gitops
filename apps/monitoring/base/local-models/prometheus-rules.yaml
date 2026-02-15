@@ -12,6 +12,7 @@ spec:
           for: 1h
           labels:
             severity: warning
+            alert_route: slack
           annotations:
             summary: "Local model predictor scrape targets are down"
             description: "Prometheus is not scraping any predictor pod targets in namespace vllm for 1 hour."

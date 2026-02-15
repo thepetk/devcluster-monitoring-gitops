@@ -25,8 +25,9 @@ Available Dashobards are:
 
 Alerts are set via `PrometheusRule` and routed through `AlertmanagerConfig`:
 
-- **LocalModelTargetsDown** (warning) — fires when no predictor scrape targets are up for 1 hour.
+- **LocalModelTargetsDown** (warning) — fires when no predictor scrape targets are up for 1 hour
 - **VllmPodNotReady** (critical) — fires when any pod in the `vllm` namespace is stuck in Pending or Failed phase for more than 1 hour
+- **RollingDemoPodNotReady** (critical) — fires when any pod in the `rolling-demo-ns` namespace is stuck in Pending or Failed phase for more than 1 hour
 
 ## Required Pre-existing Secrets
 
