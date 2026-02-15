@@ -41,7 +41,7 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "rhdh_probe_endpoint_up{endpoint_id=\"backstage_readiness\"}",
+              "expr": "min(kube_pod_container_status_ready{namespace=\"rolling-demo-ns\",pod=~\".*(rhdh|backstage).*\"})",
               "instant": true
             }
           ]
@@ -63,7 +63,7 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "rhdh_probe_endpoint_up{endpoint_id=\"backstage_liveness\"}",
+              "expr": "max(kube_pod_status_phase{namespace=\"rolling-demo-ns\",phase=\"Running\",pod=~\".*(rhdh|backstage).*\"}==1)",
               "instant": true
             }
           ]
