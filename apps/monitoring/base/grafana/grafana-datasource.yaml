@@ -40,7 +40,7 @@ spec:
     name: prometheus-user-workload
     type: prometheus
     access: proxy
-    url: https://thanos-querier.openshift-user-workload-monitoring.svc:9091
+    url: https://thanos-querier.openshift-monitoring.svc:9091
     isDefault: false
     jsonData:
       httpHeaderName1: Authorization
