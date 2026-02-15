@@ -7,4 +7,3 @@ resources:
   - grafana
   - local-models
   - ai-providers
-  - rolling-demo
