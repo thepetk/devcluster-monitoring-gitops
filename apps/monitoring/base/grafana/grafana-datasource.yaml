@@ -10,6 +10,7 @@ spec:
     matchLabels:
       dashboards: "grafana"
   datasource:
+    uid: prometheus
     name: Prometheus
     type: prometheus
     access: proxy
@@ -37,6 +38,7 @@ spec:
     matchLabels:
       dashboards: "grafana"
   datasource:
+    uid: prometheus-user-workload
     name: prometheus-user-workload
     type: prometheus
     access: proxy
