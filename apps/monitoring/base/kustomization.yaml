@@ -5,5 +5,5 @@ namespace: model-monitoring
 resources:
   - namespace.yaml
   - grafana
-  - local-models
+  - rhoai-models-registry
   # - ai-providers

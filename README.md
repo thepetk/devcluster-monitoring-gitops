@@ -18,14 +18,14 @@ This repository manages an end-to-end observability stack for:
 
 Available Dashobards are:
 
-- Local Models (Observabillity on RHOAI deployed models for RHDH AI DevCluster)
+- RHOAI Models Registry (Observability on RHOAI deployed models for RHDH AI DevCluster)
 - RHDH AI Rolling Demo
 
 ## Alerts
 
 Alerts are set via `PrometheusRule` and routed through `AlertmanagerConfig`:
 
-- **LocalModelTargetsDown** (warning) — fires when no predictor scrape targets are up for 1 hour
+- **RHOAIModelsRegistryTargetsDown** (warning) — fires when no predictor scrape targets are up for 1 hour
 - **VllmPodNotReady** (critical) — fires when any pod in the `vllm` namespace is stuck in Pending or Failed phase for more than 1 hour
 - **RollingDemoPodNotReady** (critical) — fires when any pod in the `rolling-demo-ns` namespace is stuck in Pending or Failed phase for more than 1 hour
 

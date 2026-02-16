@@ -1,7 +1,7 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
 metadata:
-  name: local-models
+  name: rhoai-models-registry
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:
@@ -11,8 +11,8 @@ spec:
   folderRef: gitops
   json: >
     {
-      "uid": "local-models",
-      "title": "Local Models (KServe vLLM)",
+      "uid": "rhoai-models-registry",
+      "title": "RHOAI Models Registry",
       "schemaVersion": 39,
       "version": 1,
       "refresh": "30s",

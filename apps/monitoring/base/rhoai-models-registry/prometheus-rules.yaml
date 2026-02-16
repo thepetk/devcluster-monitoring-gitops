@@ -1,20 +1,20 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: local-models-rules
+  name: rhoai-models-registry-rules
   namespace: model-monitoring
 spec:
   groups:
-    - name: local-models.health
+    - name: rhoai-models-registry.health
       rules:
-        - alert: LocalModelTargetsDown
+        - alert: RHOAIModelsRegistryTargetsDown
           expr: sum(up{namespace="vllm", pod=~".*predictor.*"}) == 0
           for: 1h
           labels:
             severity: warning
             alert_route: slack
           annotations:
-            summary: "Local model predictor scrape targets are down"
+            summary: "RHOAI Models Registry predictor scrape targets are down"
             description: "Prometheus is not scraping any predictor pod targets in namespace vllm for 1 hour."
         - alert: VllmPodNotReady
           expr: |
