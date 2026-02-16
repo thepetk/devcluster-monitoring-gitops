@@ -23,11 +23,13 @@ Available Dashobards are:
 
 ## Alerts
 
-Alerts are set via `PrometheusRule` and routed through `AlertmanagerConfig`:
+Alerts are set via `PrometheusRule` and routed through `AlertmanagerConfig` to Slack.
 
-- **RHOAIModelsRegistryTargetsDown** (warning) — fires when no predictor scrape targets are up for 1 hour
-- **VllmPodNotReady** (critical) — fires when any pod in the `vllm` namespace is stuck in Pending or Failed phase for more than 1 hour
-- **RollingDemoPodNotReady** (critical) — fires when any pod in the `rolling-demo-ns` namespace is stuck in Pending or Failed phase for more than 1 hour
+Each `PrometheusRule` is deployed in the namespace it monitors (required by `enforcedNamespaceLabel`), while the `AlertmanagerConfig` lives in `model-monitoring`:
+
+- **RHOAIModelsRegistryTargetsDown** (warning, `vllm` namespace) — fires when no predictor scrape targets are up for 1 hour
+- **VllmPodNotReady** (critical, `vllm` namespace) — fires when any pod in the `vllm` namespace is stuck in Pending or Failed phase for more than 1 hour
+- **RollingDemoPodNotReady** (critical, `rolling-demo-ns` namespace) — fires when any pod in the `rolling-demo-ns` namespace is stuck in Pending or Failed phase for more than 10 minutes
 
 ## Required Pre-existing Secrets
 
@@ -44,7 +46,7 @@ Keys:
 - `username`
 - `password`
 
-### lerting
+### Alerting
 
 ```
 model-monitoring/webhook-secret
@@ -57,7 +59,7 @@ Keys:
 ## Installation
 
 1. Ensure the **Grafana Operator** and **Prometheus Operator** are installed on the cluster.
-2. Enable **user-workload monitoring** on the cluster (required for ServiceMonitor scraping in user namespaces and AlertmanagerConfig):
+2. Enable **user-workload monitoring** on the cluster (required for ServiceMonitor scraping in user namespaces):
    ```bash
    oc apply -f - <<EOF
    apiVersion: v1
@@ -70,7 +72,28 @@ Keys:
        enableUserWorkload: true
    EOF
    ```
-3. Apply Argo CD Project + Application from `argocd/`
+3. Enable **user-workload Alertmanager** (required for `AlertmanagerConfig` routing to Slack):
+   ```bash
+   oc apply -f - <<EOF
+   apiVersion: v1
+   kind: ConfigMap
+   metadata:
+     name: user-workload-monitoring-config
+     namespace: openshift-user-workload-monitoring
+   data:
+     config.yaml: |
+       alertmanager:
+         enabled: true
+         enableAlertmanagerConfig: true
+   EOF
+   ```
+4. Create the **webhook secret** with your Slack Workflow webhook URL:
+   ```bash
+   oc create secret generic webhook-secret \
+     -n model-monitoring \
+     --from-literal=webhook-url='https://hooks.slack.com/triggers/YOUR/WORKFLOW/URL'
+   ```
+5. Apply Argo CD Project + Application from `argocd/`
 
 ## Contirbutions
 
