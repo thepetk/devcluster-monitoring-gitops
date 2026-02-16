@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: slack-webhook-proxy
-          image: quay.io/tpetkos/slack-webhook-proxy:v0.1.0
+          image: quay.io/tpetkos/slack-webhook-proxy:v0.1.1
           ports:
             - containerPort: 8080
           env:

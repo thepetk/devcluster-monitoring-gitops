@@ -21,29 +21,26 @@ def build_message(alert, status):
 
     if status == "firing":
         title = f"[FIRING] {alertname}"
-        status_line = f"🔴 *[FIRING] {alertname}*"
+        emoji = "\U0001f534"  # red circle
     else:
         title = f"[RESOLVED] {alertname}"
-        status_line = f"✅ *[RESOLVED] {alertname}*"
+        emoji = "\u2705"  # check mark
 
-    severity_str = (
-        "🔥 critical" if severity == "critical" else "⚠️ warning"
-    )
+    severity_emoji = "\U0001f525" if severity == "critical" else "\u26a0\ufe0f"
 
     lines = [
-        status_line,
-        "━━━━━━━━━━━━━━━━━━━━━━━",
-        f"*Severity:*  {severity_str}",
-        f"*Namespace:*  `{namespace}`",
+        f"{emoji} {title}",
+        "",
+        f"Severity: {severity_emoji} {severity}",
+        f"Namespace: {namespace}",
     ]
     if pod:
-        lines.append(f"*Pod:*  `{pod}`")
-    lines.extend([
-        f"*Summary*\n{summary}",
-        f"*Description*\n{description}",
-    ])
+        lines.append(f"Pod: {pod}")
+    lines.append("")
+    lines.append(f"Summary: {summary}")
+    lines.append(f"Description: {description}")
 
-    return title, "\n\n".join(lines)
+    return title, "\n".join(lines)
 
 
 @app.route("/webhook", methods=["POST"])

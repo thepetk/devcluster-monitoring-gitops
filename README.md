@@ -23,11 +23,11 @@ Available Dashobards are:
 
 ## Alerts
 
-Alerts are set via `PrometheusRule` and routed through `AlertmanagerConfig` to Slack.
+Alerts are set via `PrometheusRule` and routed through `AlertmanagerConfig` to a Slack Workflow webhook (temporarily have added a light proxy too).
 
-Each `PrometheusRule` is deployed in the namespace it monitors (required by `enforcedNamespaceLabel`), while the `AlertmanagerConfig` lives in `model-monitoring`:
+Available alerts are:
 
-- **RHOAIModelsRegistryTargetsDown** (warning, `vllm` namespace) — fires when no predictor scrape targets are up for 1 hour
+- **RHOAIModelsRegistryTargetsDown** (warning, `vllm` namespace) — fires when no predictor scrape targets are up for 1 hour.
 - **VllmPodNotReady** (critical, `vllm` namespace) — fires when any pod in the `vllm` namespace is stuck in Pending or Failed phase for more than 1 hour
 - **RollingDemoPodNotReady** (critical, `rolling-demo-ns` namespace) — fires when any pod in the `rolling-demo-ns` namespace is stuck in Pending or Failed phase for more than 10 minutes
 
@@ -46,18 +46,15 @@ Keys:
 - `username`
 - `password`
 
-### Alerting
-
-The `webhook-secret` must exist in each namespace that has alert rules:
+### Slack Webhook Proxy
 
 ```
-vllm/webhook-secret
-rolling-demo-ns/webhook-secret
+model-monitoring/webhook-secret
 ```
 
 Keys:
 
-- `webhook-url`
+- `webhook-url` — the Slack Workflow webhook URL
 
 ## Installation
 
@@ -90,11 +87,10 @@ Keys:
          enableAlertmanagerConfig: true
    EOF
    ```
-4. Create the **webhook secret** in each namespace that has alert rules:
+4. Create the **webhook secret** for the slack-webhook-proxy:
    ```bash
    WEBHOOK_URL='https://hooks.slack.com/triggers/YOUR/WORKFLOW/URL'
-   oc create secret generic webhook-secret -n vllm --from-literal=webhook-url="$WEBHOOK_URL"
-   oc create secret generic webhook-secret -n rolling-demo-ns --from-literal=webhook-url="$WEBHOOK_URL"
+   oc create secret generic webhook-secret -n model-monitoring --from-literal=webhook-url="$WEBHOOK_URL"
    ```
 5. Apply Argo CD Project + Application from `argocd/`
 
