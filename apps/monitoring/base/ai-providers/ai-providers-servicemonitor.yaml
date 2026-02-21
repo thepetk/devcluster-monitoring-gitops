@@ -8,7 +8,7 @@ metadata:
 spec:
   namespaceSelector:
     matchNames:
-      - monitoring
+      - devcluster-monitoring
   selector:
     matchLabels:
       app: robotheus
