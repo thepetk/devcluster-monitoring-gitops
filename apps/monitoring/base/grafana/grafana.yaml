@@ -15,7 +15,7 @@ spec:
       disable_login_form: "false"
     auth.generic_oauth:
       enabled: "true"
-      name: RedHat SSO
+      name: Red Hat SSO
       allow_sign_up: "false"
       auto_login: "false"
       scopes: openid email profile offline_access roles
