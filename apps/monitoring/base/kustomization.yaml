@@ -9,5 +9,4 @@ resources:
   # should be covered by a slack app and not by
   # a proxy
   - slack-webhook-proxy
-  # TODO: Add support for AI providers
-  # - ai-providers
+  - ai-providers
