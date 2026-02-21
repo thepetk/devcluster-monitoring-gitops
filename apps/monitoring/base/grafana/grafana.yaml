@@ -18,7 +18,7 @@ spec:
     auth.generic_oauth:
       enabled: "true"
       name: Red Hat SSO
-      allow_sign_up: "false"
+      allow_sign_up: "true"
       auto_login: "false"
       scopes: openid email profile offline_access roles
       email_attribute_path: email
@@ -26,6 +26,8 @@ spec:
       name_attribute_path: full_name
       skip_org_role_sync: "true"
       use_refresh_token: "true"
+    users:
+      auto_assign_org_role: Viewer
   deployment:
     spec:
       template:

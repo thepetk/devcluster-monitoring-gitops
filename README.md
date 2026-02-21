@@ -127,7 +127,7 @@ Keys:
      --from-literal=token_url="https://${KEYCLOAK_HOST}/realms/${REALM}/protocol/openid-connect/token" \
      --from-literal=api_url="https://${KEYCLOAK_HOST}/realms/${REALM}/protocol/openid-connect/userinfo"
    ```
-   > **Note:** Users must be manually created in Grafana before they can log in via Keycloak. Keycloak authentication does **not** auto-provision new users (`allow_sign_up` is disabled).
+   > **Note:** Users are auto-provisioned as `Viewer` on their first Red Hat SSO login. Role promotion (Editor, Admin) must be done manually by a Grafana admin.
 8. Apply Argo CD Project + Application from `argocd/`
 
 ## Contirbutions
