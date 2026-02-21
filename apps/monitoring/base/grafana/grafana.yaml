@@ -11,6 +11,8 @@ spec:
   config:
     log:
       mode: console
+    server:
+      root_url: "%(GF_SERVER_ROOT_URL)s"
     auth:
       disable_login_form: "false"
     auth.generic_oauth:
@@ -41,6 +43,11 @@ spec:
                     secretKeyRef:
                       name: grafana-admin
                       key: password
+                - name: GF_SERVER_ROOT_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: keycloak-secrets
+                      key: grafana_url
                 - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
                   valueFrom:
                     secretKeyRef:

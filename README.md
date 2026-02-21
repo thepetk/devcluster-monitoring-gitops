@@ -54,6 +54,7 @@ devcluster-monitoring/keycloak-secrets
 
 Keys:
 
+- `grafana_url` — the public Grafana route URL (e.g. `https://grafana-devcluster-monitoring.apps.<cluster>`)
 - `client_id`
 - `client_secret`
 - `auth_url` — the Keycloak authorization endpoint (`https://<KEYCLOAK_HOST>/realms/<REALM>/protocol/openid-connect/auth`)
@@ -115,9 +116,11 @@ Keys:
    ```
 7. Create the **keycloak-secrets** for Grafana OAuth integration with Keycloak:
    ```bash
+   GRAFANA_URL='https://grafana-devcluster-monitoring.apps.<cluster>'
    KEYCLOAK_HOST='your-keycloak-host'
    REALM='your-realm'
    oc create secret generic keycloak-secrets -n devcluster-monitoring \
+     --from-literal=grafana_url="${GRAFANA_URL}" \
      --from-literal=client_id="your-client-id" \
      --from-literal=client_secret="your-client-secret" \
      --from-literal=auth_url="https://${KEYCLOAK_HOST}/realms/${REALM}/protocol/openid-connect/auth" \
