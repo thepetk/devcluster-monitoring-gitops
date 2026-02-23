@@ -63,7 +63,7 @@ spec:
           "title": "Cost Today",
           "description": "Total OpenAI spend (USD) accumulated since midnight UTC, summed across all projects.",
           "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
-          "gridPos": { "x": 0, "y": 9, "w": 6, "h": 9 },
+          "gridPos": { "x": 0, "y": 9, "w": 8, "h": 6 },
           "fieldConfig": {
             "defaults": {
               "unit": "currencyUSD",
@@ -73,7 +73,47 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "sum(increase(robotheus_openai_cost_usd_total[1d]))",
+              "expr": "sum(robotheus_openai_cost_usd_today)",
+              "instant": true
+            }
+          ]
+        },
+        {
+          "type": "stat",
+          "title": "Cost This Week",
+          "description": "Total OpenAI spend (USD) over the last 7 days, summed across all projects.",
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
+          "gridPos": { "x": 8, "y": 9, "w": 8, "h": 6 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "currencyUSD",
+              "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 50 }, { "color": "red", "value": 200 }] }
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(robotheus_openai_cost_usd_week)",
+              "instant": true
+            }
+          ]
+        },
+        {
+          "type": "stat",
+          "title": "Cost This Month",
+          "description": "Total OpenAI spend (USD) over the last 30 days, summed across all projects.",
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
+          "gridPos": { "x": 16, "y": 9, "w": 8, "h": 6 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "currencyUSD",
+              "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 200 }, { "color": "red", "value": 500 }] }
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum(robotheus_openai_cost_usd_month)",
               "instant": true
             }
           ]
@@ -83,7 +123,7 @@ spec:
           "title": "OpenAI Tokens by Project",
           "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "description": "Token consumption rate broken down by OpenAI project, showing which project is driving the most API usage.",
-          "gridPos": { "x": 6, "y": 9, "w": 18, "h": 9 },
+          "gridPos": { "x": 0, "y": 15, "w": 24, "h": 9 },
           "fieldConfig": {
             "defaults": { "unit": "tokens/s", "custom": { "fillOpacity": 15 } }
           },
@@ -92,6 +132,46 @@ spec:
               "refId": "A",
               "expr": "sum by (project_id) (rate(robotheus_openai_tokens_total[5m]))",
               "legendFormat": "{{ project_id }}"
+            }
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "Weekly Cost by Project",
+          "description": "Rolling 7-day OpenAI spend per project. Shows how each project's weekly cost evolves as new days enter and old days leave the window.",
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
+          "gridPos": { "x": 0, "y": 24, "w": 12, "h": 9 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "currencyUSD",
+              "custom": { "fillOpacity": 10 }
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "robotheus_openai_cost_usd_week",
+              "legendFormat": "{{ project }}"
+            }
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "Monthly Cost by Project",
+          "description": "Rolling 30-day OpenAI spend per project. Each series shows how a project's monthly cost evolves over time as new days are added and old days drop off the window.",
+          "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
+          "gridPos": { "x": 12, "y": 24, "w": 12, "h": 9 },
+          "fieldConfig": {
+            "defaults": {
+              "unit": "currencyUSD",
+              "custom": { "fillOpacity": 10 }
+            }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "robotheus_openai_cost_usd_month",
+              "legendFormat": "{{ project }}"
             }
           ]
         }
