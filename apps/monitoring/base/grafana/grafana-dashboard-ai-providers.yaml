@@ -130,8 +130,8 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "sum by (project_id) (rate(robotheus_openai_tokens_total[5m]))",
-              "legendFormat": "{{ project_id }}"
+              "expr": "sum by (project) (rate(robotheus_openai_tokens_total[5m]))",
+              "legendFormat": "{{ project }}"
             }
           ]
         },
