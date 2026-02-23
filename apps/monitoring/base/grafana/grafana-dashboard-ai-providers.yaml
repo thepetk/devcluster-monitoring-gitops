@@ -136,41 +136,57 @@ spec:
           ]
         },
         {
-          "type": "timeseries",
+          "type": "barchart",
           "title": "Weekly Cost by Project",
-          "description": "Rolling 7-day OpenAI spend per project. Shows how each project's weekly cost evolves as new days enter and old days leave the window.",
+          "description": "Daily OpenAI spend per project over the last 7 days. Each bar represents one calendar day. Set the Grafana time range to 'Last 7 days' to restrict the visible dates.",
           "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 0, "y": 24, "w": 12, "h": 9 },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "currencyUSD",
-              "custom": { "fillOpacity": 10 }
-            }
+          "options": {
+            "xField": "date",
+            "barWidth": 0.9,
+            "groupWidth": 0.7,
+            "stacking": "none",
+            "legend": { "displayMode": "list", "placement": "bottom" }
           },
+          "fieldConfig": {
+            "defaults": { "unit": "currencyUSD" }
+          },
+          "transformations": [
+            { "id": "labelsToFields", "options": { "mode": "columns" } }
+          ],
           "targets": [
             {
               "refId": "A",
-              "expr": "robotheus_openai_cost_usd_week",
+              "expr": "robotheus_openai_cost_usd_daily",
+              "instant": true,
               "legendFormat": "{{ project }}"
             }
           ]
         },
         {
-          "type": "timeseries",
+          "type": "barchart",
           "title": "Monthly Cost by Project",
-          "description": "Rolling 30-day OpenAI spend per project. Each series shows how a project's monthly cost evolves over time as new days are added and old days drop off the window.",
+          "description": "Daily OpenAI spend per project over the last 30 days. Each bar represents one calendar day. Set the Grafana time range to 'Last 30 days' to restrict the visible dates.",
           "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 12, "y": 24, "w": 12, "h": 9 },
-          "fieldConfig": {
-            "defaults": {
-              "unit": "currencyUSD",
-              "custom": { "fillOpacity": 10 }
-            }
+          "options": {
+            "xField": "date",
+            "barWidth": 0.9,
+            "groupWidth": 0.7,
+            "stacking": "none",
+            "legend": { "displayMode": "list", "placement": "bottom" }
           },
+          "fieldConfig": {
+            "defaults": { "unit": "currencyUSD" }
+          },
+          "transformations": [
+            { "id": "labelsToFields", "options": { "mode": "columns" } }
+          ],
           "targets": [
             {
               "refId": "A",
-              "expr": "robotheus_openai_cost_usd_month",
+              "expr": "robotheus_openai_cost_usd_daily",
+              "instant": true,
               "legendFormat": "{{ project }}"
             }
           ]
