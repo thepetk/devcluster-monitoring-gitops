@@ -60,7 +60,7 @@ spec:
         },
         {
           "type": "stat",
-          "title": "Cost Today",
+          "title": "Total Cost Today",
           "description": "Total OpenAI spend (USD) accumulated since midnight UTC, summed across all projects.",
           "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 0, "y": 9, "w": 8, "h": 6 },
@@ -80,7 +80,7 @@ spec:
         },
         {
           "type": "stat",
-          "title": "Cost This Week",
+          "title": "Total Cost This Week",
           "description": "Total OpenAI spend (USD) over the last 7 days, summed across all projects.",
           "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 8, "y": 9, "w": 8, "h": 6 },
@@ -100,7 +100,7 @@ spec:
         },
         {
           "type": "stat",
-          "title": "Cost This Month",
+          "title": "Total Cost This Month",
           "description": "Total OpenAI spend (USD) over the last 30 days, summed across all projects.",
           "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 16, "y": 9, "w": 8, "h": 6 },
@@ -138,15 +138,16 @@ spec:
         {
           "type": "barchart",
           "title": "Weekly Cost by Project",
-          "description": "Daily OpenAI spend per project over the last 7 days. Each bar represents one calendar day. Set the Grafana time range to 'Last 7 days' to restrict the visible dates.",
+          "description": "Total OpenAI spend per project over the last 7 days. Each bar is one project, labeled by name on the x-axis. Cost value is shown on top of each bar.",
           "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 0, "y": 24, "w": 12, "h": 9 },
           "options": {
-            "xField": "date",
-            "barWidth": 0.9,
+            "xField": "project",
+            "barWidth": 0.6,
             "groupWidth": 0.7,
             "stacking": "none",
-            "legend": { "displayMode": "list", "placement": "bottom" }
+            "showValue": "always",
+            "legend": { "displayMode": "hidden" }
           },
           "fieldConfig": {
             "defaults": { "unit": "currencyUSD" }
@@ -157,7 +158,7 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "robotheus_openai_cost_usd_daily",
+              "expr": "robotheus_openai_cost_usd_week",
               "instant": true,
               "legendFormat": "{{ project }}"
             }
@@ -166,15 +167,16 @@ spec:
         {
           "type": "barchart",
           "title": "Monthly Cost by Project",
-          "description": "Daily OpenAI spend per project over the last 30 days. Each bar represents one calendar day. Set the Grafana time range to 'Last 30 days' to restrict the visible dates.",
+          "description": "Total OpenAI spend per project over the last 30 days. Each bar is one project, labeled by name on the x-axis. Cost value is shown on top of each bar.",
           "datasource": { "type": "prometheus", "uid": "prometheus-user-workload" },
           "gridPos": { "x": 12, "y": 24, "w": 12, "h": 9 },
           "options": {
-            "xField": "date",
-            "barWidth": 0.9,
+            "xField": "project",
+            "barWidth": 0.6,
             "groupWidth": 0.7,
             "stacking": "none",
-            "legend": { "displayMode": "list", "placement": "bottom" }
+            "showValue": "always",
+            "legend": { "displayMode": "hidden" }
           },
           "fieldConfig": {
             "defaults": { "unit": "currencyUSD" }
@@ -185,7 +187,7 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "robotheus_openai_cost_usd_daily",
+              "expr": "robotheus_openai_cost_usd_month",
               "instant": true,
               "legendFormat": "{{ project }}"
             }
