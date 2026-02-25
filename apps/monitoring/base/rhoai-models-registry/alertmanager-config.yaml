@@ -12,7 +12,7 @@ spec:
         matchType: "="
         value: slack
     receiver: slack-receiver
-    repeatInterval: 4h
+    repeatInterval: 5m
   receivers:
     - name: slack-receiver
       slackConfigs:
