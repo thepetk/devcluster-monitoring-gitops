@@ -9,9 +9,7 @@ spec:
   namespaceSelector:
     matchNames:
       - vllm
-  selector:
-    matchLabels:
-      component: predictor
+  selector: {}
   podMetricsEndpoints:
     - targetPort: 8080
       path: /metrics
