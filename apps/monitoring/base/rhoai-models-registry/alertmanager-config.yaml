@@ -24,6 +24,7 @@ spec:
           text: |
             {{ range .Alerts }}
             *Summary:* {{ .Annotations.summary }}
+
             *Description:* {{ .Annotations.description }}
             *Severity:* {{ .Labels.severity }}
             {{ end }}
