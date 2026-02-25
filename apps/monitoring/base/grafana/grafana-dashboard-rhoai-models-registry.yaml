@@ -22,13 +22,13 @@ spec:
       "panels": [
         {
           "type": "table",
-          "title": "Predictor Pods Status",
+          "title": "Pods Status",
           "datasource": { "type": "prometheus", "uid": "prometheus" },
           "gridPos": { "x": 0, "y": 0, "w": 24, "h": 8 },
           "targets": [
             {
               "refId": "A",
-              "expr": "max by (pod, phase) (kube_pod_status_phase{namespace=\"vllm\", pod=~\".*predictor.*\", phase=~\"Running|Pending|Failed\"} == 1)",
+              "expr": "max by (pod, phase) (kube_pod_status_phase{namespace=\"vllm\", phase=~\"Running|Pending|Failed\"} == 1)",
               "instant": true
             }
           ],
@@ -61,13 +61,13 @@ spec:
         },
         {
           "type": "stat",
-          "title": "Predictor pods by GPU node",
+          "title": "Pods by GPU node",
           "datasource": { "type": "prometheus", "uid": "prometheus" },
           "gridPos": { "x": 0, "y": 6, "w": 24, "h": 6 },
           "targets": [
             {
               "refId": "A",
-              "expr": "((count by (node) (max by (pod, node) (kube_pod_info{namespace=\"vllm\", pod=~\".*predictor.*\"}))) and on (node) ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"})))) or (0 * ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"}))))",
+              "expr": "((count by (node) (max by (pod, node) (kube_pod_info{namespace=\"vllm\"}))) and on (node) ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"})))) or (0 * ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"}))))",
               "instant": true
             }
           ]
@@ -160,7 +160,7 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "100 * sum by (node) (rate(container_cpu_usage_seconds_total{namespace=\"vllm\", pod=~\".*predictor.*\", container!=\"\", image!=\"\"}[5m])) / on (node) sum by (node) (kube_node_status_allocatable{resource=\"cpu\"})"
+              "expr": "100 * sum by (node) (rate(container_cpu_usage_seconds_total{namespace=\"vllm\", container!=\"\", image!=\"\"}[5m])) / on (node) sum by (node) (kube_node_status_allocatable{resource=\"cpu\"})"
             }
           ]
         },
@@ -187,7 +187,7 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "((100 * sum by (node) ((rate(container_cpu_usage_seconds_total{namespace=\"vllm\", pod=~\".*predictor.*\", container!=\"\", image!=\"\"}[5m])) * on (namespace, pod) group_left(node) kube_pod_info{namespace=\"vllm\"}) / on (node) sum by (node) (kube_node_status_allocatable{resource=\"cpu\"})) and on (node) ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"})))) or (0 * ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"}))))",
+              "expr": "((100 * sum by (node) ((rate(container_cpu_usage_seconds_total{namespace=\"vllm\", container!=\"\", image!=\"\"}[5m])) * on (namespace, pod) group_left(node) kube_pod_info{namespace=\"vllm\"}) / on (node) sum by (node) (kube_node_status_allocatable{resource=\"cpu\"})) and on (node) ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"})))) or (0 * ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"}))))",
               "instant": true
             }
           ]
@@ -200,7 +200,7 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "((100 * sum by (node) ((container_memory_working_set_bytes{namespace=\"vllm\", pod=~\".*predictor.*\", container!=\"\", image!=\"\"}) * on (namespace, pod) group_left(node) kube_pod_info{namespace=\"vllm\"}) / on (node) sum by (node) (kube_node_status_allocatable{resource=\"memory\"})) and on (node) ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"})))) or (0 * ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"}))))"
+              "expr": "((100 * sum by (node) ((container_memory_working_set_bytes{namespace=\"vllm\", container!=\"\", image!=\"\"}) * on (namespace, pod) group_left(node) kube_pod_info{namespace=\"vllm\"}) / on (node) sum by (node) (kube_node_status_allocatable{resource=\"memory\"})) and on (node) ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"})))) or (0 * ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"}))))"
             }
           ]
         },
@@ -227,7 +227,7 @@ spec:
           "targets": [
             {
               "refId": "A",
-              "expr": "((100 * sum by (node) ((container_memory_working_set_bytes{namespace=\"vllm\", pod=~\".*predictor.*\", container!=\"\", image!=\"\"}) * on (namespace, pod) group_left(node) kube_pod_info{namespace=\"vllm\"}) / on (node) sum by (node) (kube_node_status_allocatable{resource=\"memory\"})) and on (node) ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"})))) or (0 * ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"}))))",
+              "expr": "((100 * sum by (node) ((container_memory_working_set_bytes{namespace=\"vllm\", container!=\"\", image!=\"\"}) * on (namespace, pod) group_left(node) kube_pod_info{namespace=\"vllm\"}) / on (node) sum by (node) (kube_node_status_allocatable{resource=\"memory\"})) and on (node) ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"})))) or (0 * ((sum by (node) (kube_node_status_capacity{resource=\"nvidia_com_gpu\"}) > 0) unless on (node) (max by (node) (kube_node_role{role=~\"master|control-plane\"}))))",
               "instant": true
             }
           ]
