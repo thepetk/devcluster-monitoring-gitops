@@ -11,3 +11,4 @@ resources:
   - grafana-dashboard-rhoai-models-registry.yaml
   - grafana-dashboard-ai-providers.yaml
   - grafana-dashboard-rolling-demo.yaml
+  - grafana-dashboard-trustyai.yaml

@@ -1,0 +1,80 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: trustyai
+  namespace: devcluster-monitoring
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+spec:
+  resyncPeriod: 5m
+  instanceSelector:
+    matchLabels:
+      dashboards: "grafana"
+  folderRef: gitops
+  json: >
+    {
+      "uid": "trustyai",
+      "title": "TrustyAI — Minimal Metrics",
+      "schemaVersion": 39,
+      "version": 1,
+      "refresh": "10s",
+      "timezone": "browser",
+      "tags": ["trustyai", "openshift-ai"],
+      "time": { "from": "now-30m", "to": "now" },
+      "panels": [
+        {
+          "type": "timeseries",
+          "title": "TrustyAI — Total Observations (by model)",
+          "description": "If this is increasing, TrustyAI is receiving inference data.",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+          "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] },
+          "options": {
+            "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (model) (trustyai_model_observations_total)",
+              "legendFormat": "{{model}}"
+            }
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "TrustyAI — Observations / sec (5m rate, by model)",
+          "description": "Rate of observed inferences (per second). Helpful to see traffic patterns.",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+          "fieldConfig": { "defaults": { "unit": "ops" }, "overrides": [] },
+          "options": {
+            "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "sum by (model) (rate(trustyai_model_observations_total[5m]))",
+              "legendFormat": "{{model}}"
+            }
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "TrustyAI — MeanShift Drift",
+          "description": "Populated only after you configure a MeanShift drift metric request/job in TrustyAI.",
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "gridPos": { "x": 0, "y": 8, "w": 24, "h": 8 },
+          "fieldConfig": { "defaults": { "unit": "none" }, "overrides": [] },
+          "options": {
+            "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true }
+          },
+          "targets": [
+            {
+              "refId": "A",
+              "expr": "trustyai_meanshift",
+              "legendFormat": "{{model}} {{feature}}"
+            }
+          ]
+        }
+      ]
+    }

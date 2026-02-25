@@ -3,5 +3,6 @@ kind: Kustomization
 resources:
   - podmonitor-kserve-predictors.yaml
   - servicemonitor-dcgm-exporter.yaml
+  - servicemonitor-trustyai.yaml
   - prometheus-rules.yaml
   - alertmanager-config.yaml

@@ -101,6 +101,9 @@ Keys:
        alertmanager:
          enabled: true
          enableAlertmanagerConfig: true
+       prometheus:
+         logLevel: debug
+         retention: 15d
    EOF
    ```
 5. Create the **webhook-secret** for the slack-webhook-proxy:
