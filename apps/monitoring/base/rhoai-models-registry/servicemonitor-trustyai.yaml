@@ -1,19 +1,16 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: trustyai-service-operator
+  name: trustyai-runtime
   namespace: devcluster-monitoring
-  labels:
-    app: trustyai-service-operator
 spec:
   namespaceSelector:
     matchNames:
-      - redhat-ods-applications
+      - vllm
   selector:
     matchLabels:
-      control-plane: controller-manager
-      app.kubernetes.io/part-of: trustyai
+      app: trustyai-service
   endpoints:
-    - port: metrics
+    - port: http
       interval: 30s
       path: /metrics
